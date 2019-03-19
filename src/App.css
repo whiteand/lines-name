@@ -110,15 +110,36 @@
 }
 
 .game-status_player-name-title {
+  font-size: calc(10px + 1vmin);
   padding: 5px;
   margin-right: 10px;
 }
 
 .game-status_player-name {
+  font-size: calc(10px + 1vmin);
   padding: 5px;
 }
 
 .game-status_player-color {
   width: 2rem;
   height: 2rem;
+}
+
+.cell {
+  height: 1rem;
+  width: 1rem;
+  border: 1px solid #000;
+}
+
+.cell.space {
+  background-color: '#eaeaea';
+}
+
+.cell.vertical {
+}
+
+.cell.horizontal {
+}
+
+.cell.block {
 }
