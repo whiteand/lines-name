@@ -127,7 +127,9 @@
   width: 2rem;
   height: 2rem;
 }
-
+.board {
+  padding: 10px 20px;
+}
 .board-table {
   border-collapse: collapse;
 }
