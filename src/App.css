@@ -129,6 +129,8 @@
 .board-table {
   width: 90vw;
   height: 90vh;
+  max-width: 600px;
+  max-height: 500px;
   border-collapse: collapse;
 }
 
@@ -136,8 +138,11 @@
 }
 
 .cell.next-move {
-  background-color: crimson;
+  opacity: 0.2;
+  position: relative;
+  transition: all 200ms ease-in-out;
 }
+
 
 .playing-game-container {
   align-items: center;
@@ -146,6 +151,8 @@
 }
 
 .cell.space {
+  background: #000;
+  border-radius: 50%;
 }
 
 .cell.vertical,
@@ -154,14 +161,15 @@
 }
 
 .cell.vertical {
-  width: 5px;
+  width: 10px;
 }
 
 .cell.horizontal {
-  height: 5px;
+  height: 10px;
 }
 
 .cell.block {
+  opacity: 0.5;
   min-width: 2rem;
   min-height: 2rem;
 }

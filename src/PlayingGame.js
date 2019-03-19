@@ -84,6 +84,7 @@ function Board({ horizontal, vertical, filledBlocks, players, onMove, currentPla
   const [nextMove, setNextMove] = useMergeState(null);
   const blocks = getBlocks({ horizontal, vertical, filledBlocks, players });
   const table = getTable({ blocks, nextMove, players });
+  const currentPlayer = players.find(p => p.id === currentPlayerId)
   const renderCell = cell => {
     if (cell.type === 'space') {
       return <td className="cell space" key={`${cell.row}-${cell.col}`}/>
@@ -97,8 +98,15 @@ function Board({ horizontal, vertical, filledBlocks, players, onMove, currentPla
           playerId: currentPlayerId,
         })
       }
-      const classes = ['cell', 'horizontal', cell.isNext ? 'next-move' : 'not-next-move'].join(' ')
-      return <td onMouseEnter={handleHorizontal} className={classes} style={{ backgroundColor: cell.color}} key={`${cell.row}-${cell.col}`}/>
+      const classes = ['cell', 'horizontal', nextMove && cell.isNext ? 'next-move' : 'not-next-move'].join(' ')
+      const style = cell.color
+        ? { backgroundColor: cell.color }
+        : (
+          cell.isNext
+            ? { backgroundColor: currentPlayer.color }
+            : {}
+        )
+      return <td onMouseEnter={handleHorizontal} className={classes} style={style} key={`${cell.row}-${cell.col}`}/>
     }
     if (cell.type === 'vertical') {
       const handleVertical = () => {
@@ -109,8 +117,15 @@ function Board({ horizontal, vertical, filledBlocks, players, onMove, currentPla
           playerId: currentPlayerId
         })
       }
+      const style = cell.color
+        ? { backgroundColor: cell.color }
+        : (
+          cell.isNext
+            ? { backgroundColor: currentPlayer.color }
+            : {}
+        )
       const classes = ['cell', 'vertical', cell.isNext ? 'next-move' : 'not-next-move'].join(' ')
-      return <td onMouseEnter={handleVertical} className={classes} style={{ backgroundColor: cell.color}} key={`${cell.row}-${cell.col}`}/>
+      return <td onMouseEnter={handleVertical} className={classes} style={style} key={`${cell.row}-${cell.col}`}/>
     }
     const { color } = cell
     return <td className="cell block" style={color ? {backgroundColor: color } : {}} key={`${cell.row}-${cell.col}`}/>;
@@ -119,10 +134,10 @@ function Board({ horizontal, vertical, filledBlocks, players, onMove, currentPla
   const handleMove = () => {
     if (!nextMove) return
     if (nextMove.type === 'horizontal') {
-      if (horizontal[nextMove.row][nextMove.col]) return
+      if (horizontal[nextMove.row][nextMove.col]) return setNextMove(null)
     }
     if (nextMove.type === 'vertical') {
-      if (vertical[nextMove.row][nextMove.col]) return
+      if (vertical[nextMove.row][nextMove.col]) return setNextMove(null)
     }
     onMove(nextMove)
     setNextMove(null)

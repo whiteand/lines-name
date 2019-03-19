@@ -50,7 +50,7 @@ const getAffectedBlocks = ({ type, row, col, horizontal, vertical }) => {
       })
     }
   }
-  const affectedBlocks = res.map(block => ({...block, isFilled: Object.values(block).every(Boolean)}))
+  const affectedBlocks = res.map(block => ({...block, isFilled: block.top && block.bottom && block.left && block.right}))
   return affectedBlocks
 }; // TODO: write this
 const getNextPlayerId = ({ players, currentPlayerId }) => {
