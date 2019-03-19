@@ -14,7 +14,7 @@ export default function Game() {
   } = useGameState();
 
   return isPlaying ? (
-    <PlayingGame game={game} />
+    <PlayingGame game={game} onMove={makeMove}/>
   ) : (
     <Settings
       settings={settings}

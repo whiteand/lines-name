@@ -1,6 +1,4 @@
 import { useState } from 'react'
-import { memoizeWith } from 'ramda'
-
 export const log = caption => (...args) => {
   console.groupCollapsed(caption);
   console.log({ args });
@@ -19,7 +17,7 @@ export const useMergeState = initialValue => {
 
 export const getBlockId = (row, col) => `${row}-${col}`
 
-export const getBlocks = memoizeWith(x => x, ({ horizontal, vertical, filledBlocks, players }) => {
+export const getBlocks = ({ horizontal, vertical, filledBlocks, players }) => {
   const height = vertical.length
   const width = horizontal[0].length
   const getBlock = (rowInd, colInd) => {
@@ -37,11 +35,10 @@ export const getBlocks = memoizeWith(x => x, ({ horizontal, vertical, filledBloc
       right,
       bottom,
       left,
-      // occupiedBy: player
-      occupiedBy: [null, 1, 2][Math.floor(Math.random() * 3)]
+      occupiedBy: player
     }
   }
 
   const blocks = Array.from({ length: height }, (row, rowInd) => Array.from({ length: width }, (el, colInd) => getBlock(rowInd, colInd)))
   return blocks
-})
+}

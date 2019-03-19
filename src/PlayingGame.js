@@ -43,6 +43,9 @@ function getTable({ blocks, players, nextMove }) {
     if (type === 'space') {
       return cell
     }
+    if (nextMove && type === nextMove.type && nextMove.row === blockRow && nextMove.col === blockCol) {
+      cell.isNext = true
+    }
     if (type === 'horizontal') {
       if (blockRow === blocks.length) {
         const block = blocks[blockRow-1][blockCol]
@@ -65,7 +68,6 @@ function getTable({ blocks, players, nextMove }) {
       const block = blocks[blockRow][blockCol]
       cell.playerId = block.occupiedBy
     }
-
     if (cell.playerId) {
       cell.color = players.find(p => p.id === cell.playerId).color
     }
@@ -78,27 +80,57 @@ function getTable({ blocks, players, nextMove }) {
   );
 }
 
-function Board({ horizontal, vertical, filledBlocks, players }) {
-  const [nextMove] = useMergeState(null);
+function Board({ horizontal, vertical, filledBlocks, players, onMove, currentPlayerId }) {
+  const [nextMove, setNextMove] = useMergeState(null);
   const blocks = getBlocks({ horizontal, vertical, filledBlocks, players });
   const table = getTable({ blocks, nextMove, players });
-
   const renderCell = cell => {
     if (cell.type === 'space') {
       return <td className="cell space" key={`${cell.row}-${cell.col}`}/>
     }
     if (cell.type === 'horizontal') {
-      return <td className="cell horizontal" style={{ backgroundColor: cell.color}} key={`${cell.row}-${cell.col}`}/>
+      const handleHorizontal = () => {
+        setNextMove({
+          type: 'horizontal',
+          row: Math.floor(cell.row / 2),
+          col: Math.floor(cell.col / 2),
+          playerId: currentPlayerId,
+        })
+      }
+      const classes = ['cell', 'horizontal', cell.isNext ? 'next-move' : 'not-next-move'].join(' ')
+      return <td onMouseEnter={handleHorizontal} className={classes} style={{ backgroundColor: cell.color}} key={`${cell.row}-${cell.col}`}/>
     }
     if (cell.type === 'vertical') {
-      return <td className="cell vertical" style={{ backgroundColor: cell.color}} key={`${cell.row}-${cell.col}`}>{cell.row}, {cell.col}, {JSON.stringify(cell.playerId)}</td>
+      const handleVertical = () => {
+        setNextMove({
+          type: 'vertical',
+          row: Math.floor(cell.row / 2),
+          col: Math.floor(cell.col / 2),
+          playerId: currentPlayerId
+        })
+      }
+      const classes = ['cell', 'vertical', cell.isNext ? 'next-move' : 'not-next-move'].join(' ')
+      return <td onMouseEnter={handleVertical} className={classes} style={{ backgroundColor: cell.color}} key={`${cell.row}-${cell.col}`}/>
     }
-    const { color, playerId } = cell
+    const { color } = cell
     return <td className="cell block" style={color ? {backgroundColor: color } : {}} key={`${cell.row}-${cell.col}`}/>;
   };
+
+  const handleMove = () => {
+    if (!nextMove) return
+    if (nextMove.type === 'horizontal') {
+      if (horizontal[nextMove.row][nextMove.col]) return
+    }
+    if (nextMove.type === 'vertical') {
+      if (vertical[nextMove.row][nextMove.col]) return
+    }
+    onMove(nextMove)
+    setNextMove(null)
+  }
+
   return (
     <div className="board">
-      <table className="board-table">
+      <table className="board-table" onClick={handleMove}>
         <tbody>
           {table.map((row, rowInd) => (
             <tr className={rowInd % 2 === 0 ? "horizontals-row" : "blocks-row"} key={rowInd}>
@@ -118,12 +150,12 @@ function MoveHistory({ moves }) {
   return <div className="moves-history">Move History</div>;
 }
 
-export default function PlayingGame({ game }) {
+export default function PlayingGame({ game, onMove }) {
   if (!game) return null;
   return (
     <div className="playing-game-container">
       <GameStatus {...game} />
-      <Board {...game} />
+      <Board {...game} onMove={onMove}/>
       <MoveHistory moves={game.moveHistory} />
     </div>
   );

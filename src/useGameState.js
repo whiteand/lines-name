@@ -5,9 +5,28 @@ import { assocPath } from "ramda";
 const getMoveId = ({ type, row, col, playerId }) =>
   `${type}-${row}-${col}-${playerId}`;
 const getWinner = () => null; // TODO: write this
-const getAffectedBlocks = () => []; // TODO: write this
+const getAffectedBlocks = ({ type, row, col, horizontal, vertical }) => {
+  const res = []
+  if (type === 'horizontal') {
+    if (row > 0) {
+      const topBlock = {
+        top: horizontal[row-1][col],
+        bottom: horizontal[row][col],
+        left: horizontal[row-1][col],
+        right: horizontal[row-1][col+1]
+      }
+      topBlock.isFilled = Object.values(topBlock).every(Boolean)
+
+      res.push(topBlock)
+    }
+  }
+  return res.filter(Boolean)
+}; // TODO: write this
 const getNextPlayerId = ({ players, currentPlayerId }) => {
-  return players[0].id; // TODO: write this
+  const prevIndex = players.findIndex(p => p.id === currentPlayerId)
+  const nextIndex = prevIndex >= 0 ? ((prevIndex + 1) % players.length) : 0
+  const nextId = players[nextIndex].id
+  return nextId
 };
 export const useGameState = () => {
   const [isPlaying, setIsPlaying] = useState(false);
@@ -74,7 +93,7 @@ export const useGameState = () => {
         return;
       }
 
-      const blocks = getAffectedBlocks({ horizontal, vertical, row, col });
+      const blocks = getAffectedBlocks({ ...updatedBoard, row, col, type });
       const isNewBlocksFilled =
         blocks.filter(block => block.isFilled).length > 0;
 
@@ -84,7 +103,7 @@ export const useGameState = () => {
 
       setGame({
         ...updatedBoard,
-        nextPlayerId,
+        currentPlayerId: nextPlayerId,
         moveHistory: newMoveHistory
       });
     }

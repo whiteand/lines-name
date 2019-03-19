@@ -107,6 +107,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  width: 100%;
 }
 
 .game-status_player-name-title {
@@ -125,21 +126,42 @@
   height: 2rem;
 }
 
+.board-table {
+  width: 90vw;
+  height: 90vh;
+  border-collapse: collapse;
+}
+
 .cell {
-  height: 1rem;
-  width: 1rem;
-  border: 1px solid #000;
+}
+
+.cell.next-move {
+  background-color: crimson;
+}
+
+.playing-game-container {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
 }
 
 .cell.space {
-  background-color: '#eaeaea';
+}
+
+.cell.vertical,
+.cell.horizontal {
+  border: 1px dotted #282c34;
 }
 
 .cell.vertical {
+  width: 5px;
 }
 
 .cell.horizontal {
+  height: 5px;
 }
 
 .cell.block {
+  min-width: 2rem;
+  min-height: 2rem;
 }
