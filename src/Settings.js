@@ -78,7 +78,7 @@ export default function Settings({
         onAdd={handleAddPlayer}
         onRemove={handleRemovePlayer}
       />
-      <button className="btn play-btn" onClick={onPlay}>
+      <button className="btn play-btn" onClick={onPlay} disabled={players.length === 0}>
         Play
       </button>
     </div>
