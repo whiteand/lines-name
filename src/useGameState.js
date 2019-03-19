@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useMergeState } from "./utils";
+import { useMergeState, getBlockId } from "./utils";
 import { assocPath } from "ramda";
 
 const getMoveId = ({ type, row, col, playerId }) =>
@@ -13,7 +13,9 @@ const getAffectedBlocks = ({ type, row, col, horizontal, vertical }) => {
         top: horizontal[row-1][col],
         bottom: horizontal[row][col],
         left: vertical[row-1][col],
-        right: vertical[row-1][col+1]
+        right: vertical[row-1][col+1],
+        row: row-1,
+        col: col
       })
     }
     if (row < horizontal.length-1) {
@@ -21,7 +23,9 @@ const getAffectedBlocks = ({ type, row, col, horizontal, vertical }) => {
         top: horizontal[row][col],
         bottom: horizontal[row+1][col],
         left: vertical[row][col],
-        right: vertical[row][col+1]
+        right: vertical[row][col+1],
+        row,
+        col
       })
     }
   } else if (type === 'vertical') {
@@ -31,6 +35,8 @@ const getAffectedBlocks = ({ type, row, col, horizontal, vertical }) => {
         left: vertical[row][col-1],
         top: horizontal[row][col-1],
         bottom: horizontal[row+1][col-1],
+        row: row,
+        col: col - 1
       })
     }
     if (col < vertical[row].length-1) {
@@ -39,11 +45,12 @@ const getAffectedBlocks = ({ type, row, col, horizontal, vertical }) => {
         left: vertical[row][col],
         top: horizontal[row][col],
         bottom: horizontal[row+1][col],
+        row: row,
+        col: col
       })
     }
   }
   const affectedBlocks = res.map(block => ({...block, isFilled: Object.values(block).every(Boolean)}))
-  console.log({ affectedBlocks, row, col })
   return affectedBlocks
 }; // TODO: write this
 const getNextPlayerId = ({ players, currentPlayerId }) => {
@@ -91,15 +98,15 @@ export const useGameState = () => {
       setIsPlaying(true);
     },
     makeMove(move) {
-      const { type, row, col, playerId } = move;
+      const { type, row, col } = move;
       const moveId = getMoveId(move);
-      const { horizontal, vertical, currentPlayerId, moveHistory } = game;
+      const { horizontal, vertical, currentPlayerId, moveHistory, filledBlocks } = game;
       const newMoveHistory = [
         ...moveHistory,
-        { id: moveId, type, row, col, playerId }
+        { id: moveId, type, row, col, playerId: currentPlayerId }
       ];
 
-      const updatedBoard = assocPath([type, row, col], playerId, {
+      const updatedBoard = assocPath([type, row, col], currentPlayerId, {
         horizontal,
         vertical
       });
@@ -127,6 +134,14 @@ export const useGameState = () => {
 
       setGame({
         ...updatedBoard,
+        filledBlocks: {
+          ...filledBlocks,
+          ...blocks.filter(b => b.isFilled).reduce((dict, block) => {
+            const id = getBlockId(block.row, block.col)
+            dict[id] = currentPlayerId
+            return dict
+          }, {})
+        },
         currentPlayerId: nextPlayerId,
         moveHistory: newMoveHistory
       });

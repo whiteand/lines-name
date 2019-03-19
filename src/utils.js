@@ -27,7 +27,6 @@ export const getBlocks = ({ horizontal, vertical, filledBlocks, players }) => {
     const right = vertical[rowInd][colInd+1]
     const blockId = getBlockId(rowInd, colInd)
     const playerId = filledBlocks[blockId] || null
-    const player = playerId && players.find(player => player.id === playerId)
     return {
       row: rowInd,
       col: colInd,
@@ -35,7 +34,7 @@ export const getBlocks = ({ horizontal, vertical, filledBlocks, players }) => {
       right,
       bottom,
       left,
-      occupiedBy: player
+      occupiedBy: playerId
     }
   }
 

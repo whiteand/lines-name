@@ -66,7 +66,7 @@ function getTable({ blocks, players, nextMove }) {
     }
     if (type === 'block') {
       const block = blocks[blockRow][blockCol]
-      cell.playerId = block.occupiedBy
+      cell.playerId = block.occupiedBy 
     }
     if (cell.playerId) {
       cell.color = players.find(p => p.id === cell.playerId).color
