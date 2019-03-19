@@ -1,35 +1,8 @@
 import React, { useState } from "react";
 import { log } from './utils'
 import LabeledInput from './LabeledInput'
+import NumberInput from './NumberInput'
 
-function NumberInput({
-  value,
-  onChange = log("Number.setValue"),
-  label,
-  minValue = 1,
-  maxValue = 10000
-}) {
-  const handleChange = e => {
-    onChange(+e.target.value);
-  };
-  return (
-    <LabeledInput
-      value={value}
-      onChange={handleChange}
-      label={label}
-      input={() => (
-        <input
-          className="number-input_input"
-          type="number"
-          onChange={handleChange}
-          value={value}
-          min={minValue}
-          max={maxValue}
-        />
-      )}
-    />
-  );
-}
 
 function PlayersList({
   players = [],
@@ -40,14 +13,6 @@ function PlayersList({
     name: "Player " + (players.length + 1),
     color: "#0000ff"
   });
-
-  const initNewPlayer = () => {
-    setNewPlayer({
-      name: "Player " + (players.length + 1),
-      color: "#0000ff"
-    });
-  };
-
   const renderPlayer = player => (
     <div className="player-container" key={player.id}>
       <div className="player-container_color" style={{ backgroundColor: player.color }} />
