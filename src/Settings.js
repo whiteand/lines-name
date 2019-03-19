@@ -4,12 +4,11 @@ import NumberInput from "./NumberInput";
 import SettingsPlayersList from './SettingsPlayersList'
 
 export default function Settings({
-  width,
-  height,
-  players,
+  settings,
   onPlay,
   onChange = log("Settings.props.onChange")
 }) {
+  const { height, width, players } = settings
   const changeSettings = settingsPart =>
     onChange({
       height,
