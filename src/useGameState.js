@@ -9,18 +9,42 @@ const getAffectedBlocks = ({ type, row, col, horizontal, vertical }) => {
   const res = []
   if (type === 'horizontal') {
     if (row > 0) {
-      const topBlock = {
+      res.push({
         top: horizontal[row-1][col],
         bottom: horizontal[row][col],
-        left: horizontal[row-1][col],
-        right: horizontal[row-1][col+1]
-      }
-      topBlock.isFilled = Object.values(topBlock).every(Boolean)
-
-      res.push(topBlock)
+        left: vertical[row-1][col],
+        right: vertical[row-1][col+1]
+      })
+    }
+    if (row < horizontal.length-1) {
+      res.push({
+        top: horizontal[row][col],
+        bottom: horizontal[row+1][col],
+        left: vertical[row][col],
+        right: vertical[row][col+1]
+      })
+    }
+  } else if (type === 'vertical') {
+    if (col > 0) {
+      res.push({
+        right: vertical[row][col],
+        left: vertical[row][col-1],
+        top: horizontal[row][col-1],
+        bottom: horizontal[row+1][col-1],
+      })
+    }
+    if (col < vertical[row].length-1) {
+      res.push({
+        right: vertical[row][col+1],
+        left: vertical[row][col],
+        top: horizontal[row][col],
+        bottom: horizontal[row+1][col],
+      })
     }
   }
-  return res.filter(Boolean)
+  const affectedBlocks = res.map(block => ({...block, isFilled: Object.values(block).every(Boolean)}))
+  console.log({ affectedBlocks, row, col })
+  return affectedBlocks
 }; // TODO: write this
 const getNextPlayerId = ({ players, currentPlayerId }) => {
   const prevIndex = players.findIndex(p => p.id === currentPlayerId)
