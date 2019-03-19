@@ -127,10 +127,6 @@
 }
 
 .board-table {
-  width: 90vw;
-  height: 90vh;
-  max-width: 600px;
-  max-height: 500px;
   border-collapse: collapse;
 }
 
@@ -162,14 +158,16 @@
 
 .cell.vertical {
   width: 10px;
+  min-width: 10px;
 }
 
 .cell.horizontal {
+  min-height: 10px;
   height: 10px;
 }
 
 .cell.block {
   opacity: 0.5;
-  min-width: 2rem;
-  min-height: 2rem;
+  width: 3rem;
+  height: 3rem;
 }
