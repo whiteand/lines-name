@@ -1,9 +1,6 @@
 import React, { useState } from "react";
-const log = caption => (...args) => {
-  console.groupCollapsed(caption);
-  console.log({ args });
-  console.groupEnd(caption);
-};
+import { log } from './utils'
+
 
 const getDefaultInput = (state, props) => (
   <input
