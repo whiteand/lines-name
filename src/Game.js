@@ -2,6 +2,8 @@ import React from "react";
 import Settings from "./Settings";
 import { log } from "./utils";
 import { useGameState } from "./useGameState";
+import PlayingGame from './PlayingGame'
+
 export default function Game() {
   const gameState = useGameState();
   const {
@@ -12,11 +14,8 @@ export default function Game() {
     startGame,
     makeMove = log("gameState.makeMove")
   } = gameState;
-
   return isPlaying ? (
-    game ? (
-      <Game game={game} />
-    ) : null
+    <PlayingGame game={game} />
   ) : (
     <Settings
       settings={settings}
