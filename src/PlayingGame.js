@@ -121,7 +121,7 @@ function Board({
         playerId: currentPlayerId
       });
       const handleHorizontalMouseEnter = () => {
-        console.log('hey')
+        console.log("hey");
         setNextMove(getPossibleMove());
       };
       const handleHorizontalClick = () => handleMove(getPossibleMove());
@@ -131,8 +131,8 @@ function Board({
         nextMove && cell.isNext ? "next-move" : "not-next-move",
         cell.playerId ? "occupied" : "not-occupied"
       ].join(" ");
-      const style = cell.color
-        ? { backgroundColor: cell.color }
+      const style = cell.playerId
+        ? {}
         : cell.isNext
         ? { backgroundColor: currentPlayer.color }
         : {};
@@ -159,8 +159,8 @@ function Board({
       const handleVerticalClick = () => {
         handleMove(getPossibleMove());
       };
-      const style = cell.color
-        ? { backgroundColor: cell.color }
+      const style = cell.playerId
+        ? {}
         : cell.isNext
         ? { backgroundColor: currentPlayer.color }
         : {};

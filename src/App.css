@@ -103,12 +103,14 @@
 
 .game-status {
   background-color: #333;
+  z-index: 1;
   color: white;
   display: flex;
   align-items: center;
   justify-content: center;
   position: fixed;
   bottom: 0;
+  height: 50px;
   width: 100%;
 }
 
@@ -127,9 +129,11 @@
   width: 2rem;
   height: 2rem;
 }
+
 .board {
-  padding: 10px 20px;
+  padding: 10px 20px 60px 10px;
 }
+
 .board-table {
   border-collapse: collapse;
 }
@@ -179,6 +183,11 @@
 .cell.vertical,
 .cell.horizontal {
   border: 1px dotted #282c34;
+}
+
+.cell.vertical.occupied,
+.cell.horizontal.occupied {
+  background: #282c34;
 }
 
 .cell.vertical {
