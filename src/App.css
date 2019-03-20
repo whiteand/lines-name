@@ -135,11 +135,32 @@
 }
 
 .cell {
+  position: relative;
 }
 
-.cell.next-move {
+.mouse-target {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1;
+}
+
+.mouse-target.vertical {
+  left: -20px;
+  right: -20px;
+  border-radius: 50%;
+}
+
+.mouse-target.horizontal {
+  top: -20px;
+  bottom: -20px;
+  border-radius: 50%;
+}
+
+.cell.next-move.not-occupied {
   opacity: 0.2;
-  position: relative;
   transition: all 200ms ease-in-out;
 }
 
@@ -161,13 +182,12 @@
 }
 
 .cell.vertical {
-  width: 10px;
-  min-width: 10px;
+  width: 5px;
+  min-width: 5px;
 }
-
 .cell.horizontal {
-  min-height: 10px;
-  height: 10px;
+  min-height: 5px;
+  height: 5px;
 }
 
 .cell.block {
